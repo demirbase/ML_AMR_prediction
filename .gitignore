@@ -69,6 +69,9 @@ venv.bak/
 *.sln
 *.sw?
 
+# AI assistant instructions
+.github/copilot-instructions.md
+
 # Data files
 data/processed/kmer_densities/
 data/raw/genomes/
