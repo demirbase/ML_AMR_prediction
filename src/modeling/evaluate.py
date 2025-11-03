@@ -26,7 +26,7 @@ class ModelEvaluator:
 
     def __init__(self, config: dict):
         self.params = config['model_training_params']
-        self.data_dir = Path(self.params['data_dir'])
+        self.data_dir = Path(config['data_processing_params']['training_set_output_dir'])
         self.models_dir = Path(self.params['models_output_dir'])
         self.reports_dir = Path(self.params['reports_output_dir'])
         self.reports_dir.mkdir(parents=True, exist_ok=True)
@@ -59,11 +59,17 @@ class ModelEvaluator:
     def _load_data_and_model(self, model_name: str):
         """Loads the test data and the pre-trained model."""
         print("Step 1: Loading data and original model...")
-        test_df = pd.read_csv(self.data_dir / 'test_set.csv')
-        X_test = test_df.drop(columns=['Resistance (1/0)'])
-        y_test = test_df['Resistance (1/0)']
+        
+        # Load test data (separate X and Y files)
+        X_test = pd.read_csv(self.data_dir / 'X_test.csv')
+        y_test = pd.read_csv(self.data_dir / 'Y_test.csv').iloc[:, 0]
 
-        model_path = self.models_dir / f'best_{model_name.lower()}.joblib'
+        # Try to load model from model-specific directory
+        model_path = self.models_dir / model_name / f'best_{model_name}_model.pkl'
+        if not model_path.exists():
+            # Fallback to old location
+            model_path = self.models_dir / f'best_{model_name.lower()}.joblib'
+        
         if not model_path.exists():
             raise FileNotFoundError(f"Model file not found at {model_path}. Please run training first.")
 

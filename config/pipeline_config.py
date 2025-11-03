@@ -22,7 +22,7 @@ pipeline_config = {
         'kmer_dir': 'data/processed/kmer_densities',
         'final_merged_file': 'data/processed/files_csv/resistance_3-mer.csv',
         'training_set_output_dir': 'data/training_data',
-        'ncbi_api_key': 'YOUR_API_KEY_HERE',  # IMPORTANT: Replace with your actual NCBI API key
+        'ncbi_api_key': '959f154eef3f31928bbb9ddd5d99ecb45c09',  # NCBI API key
         'k_size': 3,
         'max_workers': 8,
     },
@@ -37,24 +37,10 @@ pipeline_config = {
 
     # --- Model Training Parameters ---
     'model_training_params': {
-        'models_to_run': ['RandomForest', 'GradientBoosting', 'SVM'],
-        # Hyperparameter grid for GridSearchCV
-        'hyperparameters': {
-            'RandomForest': {
-                'n_estimators': [100, 200, 300],
-                'max_depth': [10, 20, None],
-                'min_samples_split': [2, 5, 10]
-            },
-            'GradientBoosting': {
-                'n_estimators': [100, 200],
-                'learning_rate': [0.05, 0.1],
-                'max_depth': [3, 5, 7]
-            },
-            'SVM': {
-                'C': [0.1, 1, 10],
-                'gamma': ['scale', 'auto'],
-                'kernel': ['rbf', 'linear']
-            }
-        }
+        'models_to_run': ['RandomForest', 'GradientBoosting', 'LogisticRegression', 'MLPClassifier', 'SVM'],
+        'models_output_dir': 'models',
+        'reports_output_dir': 'reports',
+        # Note: Hyperparameters are now hard-coded in train.py based on original project values
+        # RandomForest: n_estimators=2000, max_depth=50, min_samples_split=2, etc.
     }
 }

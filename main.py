@@ -35,8 +35,8 @@ def main():
         '--model',
         type=str,
         help=(
-            "The model to evaluate (e.g., 'RandomForest'). "
-            "Required for the 'evaluate' pipeline."
+            "The model to train or evaluate (e.g., 'RandomForest'). "
+            "Optional for 'train' (trains all if not specified), required for 'evaluate'."
         )
     )
 
@@ -55,7 +55,7 @@ def main():
             print("= Running Model Training Pipeline           =")
             print("=============================================")
             trainer = ModelTrainer(config=pipeline_config)
-            trainer.run_training()
+            trainer.run_training(model_name=args.model)
 
         elif args.pipeline == 'evaluate':
             if not args.model:
