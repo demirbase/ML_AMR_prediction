@@ -1,6 +1,5 @@
 # src/data_processing/pipeline.py
 
-from pathlib import Path
 from .resistance_info import ResistanceInfo
 from .genome_downloader import GenomeDownloader
 from .kmer_processor import KmerProcessor

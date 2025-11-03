@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
-from sklearn.preprocessing import QuantileTransformer
+from sklearn.preprocessing import QuantileTransformer, StandardScaler, RobustScaler
 from sklearn.pipeline import Pipeline
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import (
@@ -60,58 +60,100 @@ class ModelTrainer:
 
     def _build_model_pipeline(self, model_name: str):
         """
-        Builds a complete pipeline with QuantileTransformer and the specified model.
+        Builds a complete pipeline with appropriate scaler and the specified model.
         Returns the pipeline wrapped in CalibratedClassifierCV.
+        Uses exact hyperparameters from original validated models.
         """
-        # Get base model with hyperparameters from config
+        # Get base model with exact hyperparameters from original project
         if model_name == 'RandomForest':
+            # RandomForest uses QuantileTransformer
+            scaler = QuantileTransformer(output_distribution='normal')
             model = RandomForestClassifier(
                 random_state=42,
-                n_estimators=2000,  # Original value: 2000 (use 200 for faster testing)
+                n_estimators=2000,
                 max_depth=50,
                 min_samples_split=2,
                 min_samples_leaf=1,
                 max_features='sqrt',
                 bootstrap=False,
-                class_weight='balanced_subsample',
-                n_jobs=-1  # Use all CPU cores
+                class_weight='balanced_subsample'
             )
+            calibration_method = 'sigmoid'
+            calibration_cv = 10
+            
         elif model_name == 'GradientBoosting':
+            # GradientBoosting uses StandardScaler
+            scaler = StandardScaler()
             model = GradientBoostingClassifier(
                 random_state=42,
-                n_estimators=200,
-                learning_rate=0.1,
-                max_depth=5
+                n_estimators=2000,
+                learning_rate=0.01,
+                max_depth=6,
+                min_samples_split=5,
+                min_samples_leaf=2,
+                subsample=0.8,
+                validation_fraction=0.2,
+                n_iter_no_change=20
             )
+            calibration_method = 'isotonic'
+            calibration_cv = 5
+            
         elif model_name == 'LogisticRegression':
+            # LogisticRegression uses RobustScaler
+            scaler = RobustScaler()
             model = LogisticRegression(
                 random_state=42,
-                max_iter=1000,
+                penalty='elasticnet',
+                solver='saga',
+                l1_ratio=0.5,
+                C=0.1,
+                max_iter=5000,
                 class_weight='balanced'
             )
+            calibration_method = 'sigmoid'
+            calibration_cv = 5
+            
         elif model_name == 'MLPClassifier':
+            # MLPClassifier uses StandardScaler
+            scaler = StandardScaler()
             model = MLPClassifier(
                 random_state=42,
-                max_iter=1000,
-                hidden_layer_sizes=(100, 50)
+                hidden_layer_sizes=(300, 150),
+                activation='relu',
+                solver='adam',
+                alpha=0.00005,
+                learning_rate='adaptive',
+                early_stopping=True,
+                max_iter=10000
             )
+            calibration_method = 'sigmoid'
+            calibration_cv = 5
+            
         elif model_name == 'SVM':
+            # SVM uses StandardScaler
+            scaler = StandardScaler()
             model = SVC(
                 random_state=42,
                 probability=True,
+                C=0.5,
+                kernel='rbf',
+                gamma='scale',
                 class_weight='balanced'
             )
+            calibration_method = 'sigmoid'
+            calibration_cv = 5
+            
         else:
             raise ValueError(f"Model {model_name} not supported.")
         
-        # Build pipeline with QuantileTransformer (like original project)
+        # Build pipeline with appropriate scaler
         pipeline = Pipeline([
-            ('scaler', QuantileTransformer(output_distribution='normal')),
+            ('scaler', scaler),
             ('classifier', model)
         ])
         
-        # Wrap with CalibratedClassifierCV (like original project)
-        return CalibratedClassifierCV(pipeline, method='sigmoid', cv=10)
+        # Wrap with CalibratedClassifierCV with model-specific settings
+        return CalibratedClassifierCV(pipeline, method=calibration_method, cv=calibration_cv)
 
     def _evaluate_model(self, model, X, Y):
         """
