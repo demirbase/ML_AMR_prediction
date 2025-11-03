@@ -1,0 +1,10 @@
+=== Model Ranking (by F1-Score) ===
+
+F1-Score balances precision and recall, making it the key metric for AMR prediction.
+Formula: F1 = 2 × (Precision × Recall) / (Precision + Recall)
+
+1. Random Forest             → F1-Score = 0.9746 (Accuracy: 0.9823)
+2. MLP Neural Network        → F1-Score = 0.9729 (Accuracy: 0.9812)
+3. Gradient Boosting         → F1-Score = 0.9622 (Accuracy: 0.9737)
+4. Support Vector Machine    → F1-Score = 0.9059 (Accuracy: 0.9333)
+5. Logistic Regression       → F1-Score = 0.7848 (Accuracy: 0.8602)
