@@ -1,6 +1,20 @@
-# AMR Genomic Project
+# AMR Prediction Pipeline v2.0: From Thesis to Big Data 🧬
 
-This project predicts antibiotic resistance from genomic data using K-mer counting and XGBoost.
+> **Note:** This repository is the advanced continuation (v2.0) of my BSc thesis. The project has been completely refactored from a memory-bound experimental script into a scalable, production-grade Big Data pipeline.
+
+## 🚀 Project Evolution (v1 vs v2)
+
+| Feature | v1.0 (BSc Thesis) | v2.0 (Current / MSc Level) |
+| :--- | :--- | :--- |
+| **Target** | Beta-lactam resistance in *E. coli* | **Ciprofloxacin** resistance (Fluoroquinolones) |
+| **Method** | Simple 3-mer frequency | **Alignment-Free 31-mer** counting (via KMC) |
+| **Data Scale** | Small Dataset (Memory-bound) | **Big Data** (~4,400 Genomes, 44M Features) |
+| **Technique** | Standard ML (RF, SVM, MLP) | **Incremental Learning** & Optuna Optimization |
+| **Infrastructure** | Local Machine | **Cloud Computing** (Google Cloud VM) |
+| **Feature Eng.** | Basic counts | **Genetic Feature Extraction** (Mapped to GyrA/ParC) |
+| **Performance** | Experimental | **State-of-the-Art** (MCC: 0.90, AUC: 0.97) |
+
+---
 
 ## Project Structure
 
