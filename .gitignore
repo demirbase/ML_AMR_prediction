@@ -1,0 +1,11 @@
+data/
+logs/
+__pycache__/
+*.pyc
+.DS_Store
+*.npz
+*.fna
+*.kmc_pre
+*.kmc_suf
+results/
+models/
