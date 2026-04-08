@@ -1,3 +1,13 @@
+> ⚠️ **DEPRECATION NOTICE** ⚠️
+> 
+> **This repository is no longer actively maintained.** > The project has been officially moved to an organization and is actively being developed here:
+> 
+> 👉 **[iumobg/ML_AMR_Prediction_v2](https://github.com/iumobg/ML_AMR_Prediction_v2)**
+> 
+> *(The content below is archived for historical purposes to demonstrate the project's evolution.)*
+
+---
+
 # AMR Prediction Pipeline v2.0: From Thesis to Big Data 🧬
 
 > **Note:** This repository is the advanced continuation (v2.0) of my BSc thesis. The project has been completely refactored from a memory-bound experimental script into a scalable, production-grade Big Data pipeline.
